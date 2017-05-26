@@ -15,6 +15,7 @@ env:
 
 cache:
   directories:
+    - ExternalData_OBJECT_STORES=${HOME}/.ExternalData
     - ${ITK_SOURCE_DIR}
     - ${ITK_BUILD_DIR}
     - ${ELASTIX_SOURCE_DIR}
@@ -38,6 +39,19 @@ matrix:
 before_script:
   - mkdir -p ${SIMPLEELASTIX_BUILD_DIR}
 
+  ITKCommon
+  ITKDisplacementField
+  ITKIOGDCM
+  ITKIOImageBase
+  ITKIOTransformBase
+  ITKImageCompose
+  ITKImageIntensity
+  ITKLabelMap
+  ITKMetricsv4
+  ITKOptimizersv4
+  ITKRegistrationMethodsv4
+  ITKTransform
+
 script:
   - if [[ ! -e ${ITK_BUILD_DIR}/ITKConfig.cmake ]]; then
       rm -rf ${ITK_SOURCE_DIR} {ITK_BUILD_DIR} &&
@@ -46,7 +60,7 @@ script:
       git checkout v4.11.1 &&
       mkdir -p ${ITK_BUILD_DIR} &&
       cd ${ITK_BUILD_DIR} &&
-      cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ${ITK_SOURCE_DIR} &&
+      cmake -DModule_ITKCommon:BOOL=ON -DModule_DisplacementField:BOOL=ON -DModule_ITKIOGDCM:BOOL=ON -DModule_ITKIOImageBase:BOOL=ON -DModule_ITKIOTransformBase:BOOL=ON -DModule_ITKImageCompose:BOOL=ON -DModule_ITKImageIntensity:BOOL=ON -DModule_ITKLabelMap:BOOL=ON -DModule_ITKMetricsv4:BOOL=ON -DModule_ITKOptimizersv4:BOOL=ON -DModule_ITKRegistrationMethodsv4:BOOL=ON -DModule_ITKTransform:BOOL=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ${ITK_SOURCE_DIR} &&
       make --jobs=4; fi
   - if [[ ! -e ${ELASTIX_BUILD_DIR}/src/UseElastix.cmake ]]; then
       rm -rf ${ELASTIX_SOURCE_DIR} ${ELASTIX_BUILD_DIR} &&
