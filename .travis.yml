@@ -46,7 +46,7 @@ script:
       git checkout v4.11.1 &&
       mkdir -p ${ITK_BUILD_DIR} &&
       cd ${ITK_BUILD_DIR} &&
-      cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF -DITKGroup_IO:BOOL=ON -DModule_ITKDistanceMap:BOOL=ON -DModule_ITKImageFusion:BOOL=ON -DModule_ITKLabelMap:BOOL:=ON -DModule_ITKMathematicalMorphology:BOOL=ON -DModule_ITKOptimizers:BOOL=ON -DModule_ITKOptimizersv4:BOOL=ON -DModule_ITKRegistrationCommon:BOOL=ON -DModule_ITKVideoIO:BOOL=ON-DCMAKE_BUILD_TYPE=Release ${ITK_SOURCE_DIR} &&
+      cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ${ITK_SOURCE_DIR} &&
       make --jobs=4; fi
   - if [[ ! -e ${ELASTIX_BUILD_DIR}/src/UseElastix.cmake ]]; then
       rm -rf ${ELASTIX_SOURCE_DIR} ${ELASTIX_BUILD_DIR} &&
