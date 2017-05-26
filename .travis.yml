@@ -51,6 +51,7 @@ script:
   - if [[ ! -e ${ELASTIX_BUILD_DIR}/src/UseElastix.cmake ]]; then
       rm -rf ${ELASTIX_SOURCE_DIR} ${ELASTIX_BUILD_DIR} &&
       git clone ${ELASTIX_URL} ${ELASTIX_SOURCE_DIR} &&
+      cd ${ELASTIX_SOURCE_DIR}
       git checkout ef057ff89233822b26b04b31c3c043af57d5deff &&
       mkdir -p ${ELASTIX_BUILD_DIR}
       cd ${ELASTIX_BUILD_DIR} &&
