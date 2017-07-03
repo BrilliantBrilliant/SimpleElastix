@@ -3,14 +3,14 @@
 Getting Started
 ===============
 
-This page explains how to install SimpleElastix. The process involves compiling the C++ project and linking against a target language from which you would like to use SimpleElastix. SimpleElastix can be linked against Python, Java, R, Ruby, Octave, Lua, Tcl and C#. 
+This page explains how to install SimpleElastix. The process involves compiling the C++ project and linking against a target language from which we would like to use SimpleElastix. SimpleElastix can be linked against Python, Java, R, Ruby, Octave, Lua, Tcl and C#. 
 
 .. _Linux:
 
 SuperBuild On Linux
 -------------------
 
-SimpleElastix can be compiled with the SuperBuild. The SuperBuild is a script that automatically downloads and install any dependencies so you can don't have to install elastix, ITK or SWIG on beforehand. The only thing you need is CMake, git and a compiler toolchain. To build SimpleElastix, use the following commands to download the code and start the build:
+SimpleElastix can be compiled with the SuperBuild. The SuperBuild is a script that automatically downloads and install any dependencies so we can don't have to install elastix, ITK or SWIG on beforehand. The only thing we need is CMake, git and a compiler toolchain. To build SimpleElastix, we use the following commands to download the code and start the build:
 
 ::
 
@@ -32,7 +32,11 @@ and run the following command:
 
     $ sudo python setup.py install
 
-This will install the SimpleITK python module with SimpleElastix unto your system, which can then be imported into your scripts like any other python module. 
+This will install the SimpleITK python module with SimpleElastix unto your system, which can then be imported into your scripts like any other python module. Packages for other languages need to be installed in other ways.
+
+.. info::
+
+    Pull requests describing how to install language packages are very welcome.
 
 Target language dependencies need to be pre-installed. The relevant :code:`apt-get` packages are  
 
@@ -71,24 +75,29 @@ We will use CMake to generate build files and the msbuild.exe program to compile
     - Download and install `CMake GUI <http://www.cmake.org/download/>`_. Be sure to select `Add CMake to the system PATH` option.
     - :code:`git clone https://github.com/kaspermarstal/SimpleElastix` into a source folder of your choice. You can install `GitHub Desktop <https://desktop.github.com/>`_ and use the accompanying command line tool with git automatically added to its path.
     - Make a new directory named `build` and cd into it by typing `cd build`. Here we will assume that the build directory and the source directory is in the same folder.
-2. Compile the project.
+2. Enable x64-bit build (Optional).
+    - Navigate to `C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC>` (or equivalent depending on your version of Visual Studio) and run `vcvarsall amd64`.
+3. Compile the project.
     - Open "Developer Command Prompt for VS2015" (or equivalent depending on your version of Visual Studio)
     - Run `cmake ../SimpleElastix/SuperBuild`.
-    - Run `msbuild /p:configuration=release ALL_BUILD.vcxproj`. 
-3. Enable x64 bit build (Optional).
-    - Prior to running the `cmake` command in step 2, navigate to `C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC>` (or equivalent depending on your version of Visual Studio) and `vcvarsall amd64`.
+    - Run `msbuild /p:configuration=release ALL_BUILD.vcxproj`.
+4. Install the project.
+    - Navigate to `${BUILD_DIRECTORY}/SimpleITK-build/Wrapping/Python/Packaging` and run `python setup.py install` or whatever command is required for other languages.
 
+.. info::
+
+    Pull requests describing how to install language packages are very welcome.
 
 Using Visual Studio
 ~~~~~~~~~~~~~~~~~~~
 
-Will use CMake to generate build files and the Visual Studio compiler to compile the project. 
+Will use CMake to generate build files and Visual Studio to compile the project. 
 
-1. Download CMake, git and code, and setup directories.
-    - Download and install `CMake GUI <http://www.cmake.org/download/>`_.
+1. Setup prerequisites.
     - :code:`git clone https://github.com/kaspermarstal/SimpleElastix` into a source folder of your choice.
-    - Point the CMake source directory to the :code:`SimpleElastix/SuperBuild` folder inside the source directory.
-    - Point the CMake build directory to a clean directory. Note that Visual Studio may complain during the build if the path is longer than 50 characters. Make a build directory with a short name at the root of your harddrive to avoid any issues.
+    - Download and install `CMake GUI <http://www.cmake.org/download/>`_.
+    - Open CMake and point the CMake source directory to the :code:`SimpleElastix/SuperBuild` folder inside the source directory.
+    - Point the CMake build directory to a clean directory. Note that Visual Studio may complain during the build if the path is longer than 50 characters. Make a build directory with a short name at the root of your harddrive to avoid any issues, e.g. `C:\build\selx\`.
 
     .. figure:: _static/WindowsInstallationConfigureCMake.png
         :align: center
@@ -99,14 +108,14 @@ Will use CMake to generate build files and the Visual Studio compiler to compile
 
 2. Select compiler.
     - Press configure to bring up the compiler selection window.
-    - Check whether our target languages are installed as 32-bit or 64-bit. For example, if our Python installation is 64-bit, we will need to build the 64-bit version of SimpleElastix to link it. If at all possible, we choose the 64-bit version since the build may run out of memory on 32-bit platforms.
+    - Check whether our target languages are installed as 32-bit or 64-bit. For example, if our Python installation is 64-bit, we will need to build the 64-bit version of SimpleElastix to link it. Choosing the 64-bit version is highly recommende.
     - Choose a compiler and click next. CMake will find the selected compiler for us if we leave the "Use default native compiler" option checked.
 
     .. tip::
 
         - If we need a compiler other than the default system option, we select "Specify native compilers". If we don't know what this means or what we need, we leave the "Use default native compiler" option checked.
         - If CMake complains that a compiler cannot be found, we install the free `Visual Studio Community Edition <https://www.visualstudio.com/>`_ .
-        - If CMake does not pick up our target language, we can set the paths manually. For example, to manually configure CMake Python paths, tick "Advanced" and specify :code:`PYTHON_EXECUTABLE`, :code:`PYTHON_INCLUDE_DIR` and :code:`PYTHON_LIBRARY`. See Troubleshooting section for details.
+        - If CMake does not pick up our target language, it means that the language installation is not on our `PATH`. Before proceeding, install or re-install the target language package and make sure any checkbox like "Add to path current/all users" is checked. Restart. It is also possible to set these paths manually (although it is recommended to fix this issue by properly installing language packages). For example, to manually configure CMake Python paths, tick "Advanced" and specify :code:`PYTHON_EXECUTABLE`, :code:`PYTHON_INCLUDE_DIR` and :code:`PYTHON_LIBRARY`. See Troubleshooting section for details.
 
     .. figure:: _static/WindowsInstallationSelectCompiler.png
         :align: center
@@ -183,19 +192,21 @@ If you are still experiencing problems at this point, re-install the language pa
 
 Visual Studio throws :code:`LNK1102 out of memory` error even though I selected the 64-bit compiler
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-While Visual Studio targets 64-bit platforms when we select a 64-bit compiler, the Visual Studio toolchain itself will be 32-bit by default. We may therefore experience an out-of-memory error even though you compile a 64-bit vesion of elastix, especially during the linking stage. There are (at least) two ways we can try switch to a 64-bit toolchain ("try" because these methods work, someimes they don't).
+While Visual Studio targets 64-bit platforms when we select a 64-bit compiler, the Visual Studio toolchain itself will be 32-bit by default. We may therefore experience an out-of-memory error even though you compile a 64-bit vesion of elastix, especially during the linking stage. There are (at least) two ways we can try switch to a 64-bit toolchain.
 
-    - Solution 1: Set the environment variable :code:`_IsNativeEnvironment=true` in command prompt, then call the Visual Studio  executable from command line. For example, in the case of VS2013:
+    - Solution 2: Set the environment variable :code:`_IsNativeEnvironment=true` in command prompt, then call the Visual Studio  executable from command line. For example, in the case of VS2013:
     ::
 
         start "c:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe" c:\SimpleElastix\build\SimpleITK-build\SimpleITK.sln
-    - Solution 2: In Visual Studio, edit your .vcxproj file and insert the following after the :code:`<Import...Microsoft.Cpp.Defaults>` line:
+    - Solution 3: In Visual Studio, edit your .vcxproj file and insert the following after the :code:`<Import...Microsoft.Cpp.Defaults>` line:
     ::
 
         <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
         <PropertyGroup>
             <PreferredToolArchitecture>x64</PreferredToolArchitecture>
         </PropertyGroup>
+
+Some users have succes swith these approaches, others do not. If none of these methods work, and you need to to build with a x64-bit toolchain, see the guide to compiling via the command line.
 
 The SuperBuild throws :code:`Server SSL certificate verification failed: certificate has expired` during checkout of elastix
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
